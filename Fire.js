@@ -2,8 +2,14 @@
 // import getUserInfo from "./utils/getUserInfo";
 // import shrinkImageAsync from "./utils/shrinkImageAsync";
 // import uploadPhoto from "./utils/uploadPhoto";
-
-import "@firebase/firestore";
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  PROJECT_ID,
+  MESSAGE_SENDER_ID,
+  STORAGE_BUCKET
+} from "react-native-dotenv";
 const firebase = require("firebase");
 
 const collectionName = "project-6932705831746224621s";
@@ -11,12 +17,12 @@ const collectionName = "project-6932705831746224621s";
 class Fire {
   constructor() {
     firebase.initializeApp({
-      apiKey: "AIzaSyBKfgFtbBNRsx-_OvNH1D5WnkfjQrXTh2U",
-      authDomain: "project-6932705831746224621.firebaseapp.com",
-      databaseURL: "https://project-6932705831746224621.firebaseio.com",
-      projectId: "project-6932705831746224621",
-      storageBucket: "project-6932705831746224621.appspot.com",
-      messagingSenderId: "1033777722059"
+      apiKey: API_KEY,
+      authDomain: AUTH_DOMAIN,
+      databaseURL: DATABASE_URL,
+      projectId: PROJECT_ID,
+      storageBucket: STORAGE_BUCKET,
+      messagingSenderId: MESSAGE_SENDER_ID
     });
     firebase.auth().onAuthStateChanged(async user => {
       if (!user) {
