@@ -7,7 +7,9 @@ import {
   NetInfo,
   Alert,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform,
+  Dimensions
 } from "react-native";
 import LoadingPage from "../misc/LoadingPage";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
@@ -15,10 +17,24 @@ import { createStackNavigator } from "react-navigation-stack";
 import AuthNavigator from "../login/AuthNavigator";
 import CreateProfilePage from "../login/CreateProfilePage";
 import LoginPage from "../login/LoginPage";
+import ProfileCardView from "../cards/ProfileCardView";
+import GlobalStyles from "../global/GlobalStyles";
+const global = require("../global/GlobalFunctions.js");
 
-const AppStack = createStackNavigator({ App: LoadingPage });
+const IS_ANDROID = Platform.OS === "android";
+const NAVBAR_HEIGHT = IS_ANDROID ? 54 : 64; // TODO: check the android tabbar height
+const PAGE_HEIGHT = Dimensions.get("window").height - NAVBAR_HEIGHT;
+const PAGE_WIDTH = Dimensions.get("window").width;
+const NAVBAR_SELECTOR_WIDTH = PAGE_WIDTH * 0.2;
+const NAVBAR_SELECTOR_HEIGHT = 2;
+const HEADER_TITLE_LEFT_MARGIN = Platform.OS === "ios" ? 0 : 0 || 0;
+const SAVE_BUTTON_STATE = global.saveButtonStates();
+const NAVIGATOR_BACKHANDLER = "NAVIGATOR_BACKHANDLER";
+
+const AppStack = createStackNavigator({ App: ProfileCardView });
 const AuthStack = createStackNavigator({
   Auth: LoginPage,
+  ProfileCardView: ProfileCardView,
   CreateProfilePage: CreateProfilePage
 });
 
@@ -26,7 +42,7 @@ const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       AuthLoading: LoadingPage,
-      //   App: AppStack,
+      App: AppStack,
       Auth: AuthStack
     },
     {

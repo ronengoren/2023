@@ -13,13 +13,23 @@ import {
   findNodeHandle,
   Platform,
   ImageBackground,
-  SafeAreaView
+  SafeAreaView,
+  Dimensions,
+  Animated
 } from "react-native";
 import RectButton from "../global/RectButton";
 
 import AuthStyle from "./AuthStylesheet";
-import Fire from "../../Fire";
-import firebase from "firebase";
+// import Fire from "../../Fire";
+// import firebase from "firebase";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import {
+  updateEmail,
+  updatePassword,
+  signup,
+  login
+} from "../../store/actions/user";
 // import auth from "@react-native-firebase/auth";
 
 const IS_ANDROID = Platform.OS === "android";
@@ -28,28 +38,38 @@ class LoginPage extends Component {
   state = {
     isLoading: false,
     email: "",
-    password: ""
+    password: "",
+    userData: {}
   };
   constructor(props) {
     super(props);
     // this.studentProfile = null;
   }
-  handleLogin = () => {
-    const { email, password } = this.state;
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("CreateProfilePage"))
-      .catch(error => console.log(error));
+  handleLogin = () => {
+    this.props.login();
+    // this.props.navigation.navigate("ProfileCardView");
+    // const { email, password } = this.state;
+
+    // firebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password)
+    //   .then(res => {
+    //     this.storeToken(JSON.stringify(res.user));
+    //   })
+    //   .then(() => this.props.navigation.navigate("ProfileCardView"))
+
+    //   .catch(error => console.log(error));
   };
   _signup = () => {
-    const { email, password } = this.state;
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("CreateProfilePage"))
-      .catch(error => console.log(error));
+    this.props.signup();
+    // this.props.navigation.navigate("CreateProfilePage");
+    // const { email, password } = this.state;
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then(() => this.props.navigation.navigate("CreateProfilePage"))
+    //   .catch(error => console.log(error));
   };
 
   _forgotPassword() {
@@ -109,33 +129,30 @@ class LoginPage extends Component {
                 <Text style={AuthStyle.textTitles}> Tufts Email: </Text>
                 <View style={AuthStyle.emailInputBorder}>
                   <TextInput
-                    ref="emailInput"
+                    // ref="emailInput"
                     style={AuthStyle.emailInput}
-                    onChangeText={email => this.setState({ email })}
+                    onChangeText={email => this.props.updateEmail(email)}
                     underlineColorAndroid="white"
                     keyboardType="email-address"
-                    value={this.state.email}
+                    value={this.props.user.email}
                     returnKeyType={"next"}
-                    onFocus={this._inputFocused.bind(this, "emailInput")}
-                    onBlur={this._dismissFocus.bind(this, "emailInput")}
-                    onSubmitEditing={event => {
-                      this.refs.passwordInput.focus();
-                    }}
                   />
                   <Text style={AuthStyle.emailExt}>{this.props.email_ext}</Text>
                 </View>
                 <Text style={AuthStyle.textTitles}> Password: </Text>
                 <View style={AuthStyle.passwordInputBorder}>
                   <TextInput
-                    ref="passwordInput"
+                    // ref="passwordInput"
                     style={AuthStyle.passwordInput}
                     underlineColorAndroid="white"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
+                    onChangeText={password =>
+                      this.props.updatePassword(password)
+                    }
+                    value={this.props.user.password}
                     secureTextEntry={true}
                     returnKeyType={"done"}
-                    onFocus={this._inputFocused.bind(this, "passwordInput")}
-                    onBlur={this._dismissFocus.bind(this, "passwordInput")}
+                    // onFocus={this._inputFocused.bind(this, "passwordInput")}
+                    // onBlur={this._dismissFocus.bind(this, "passwordInput")}
                   />
                 </View>
                 <RectButton
@@ -174,4 +191,18 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginPage;
+// export default LoginPage;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    { updateEmail, updatePassword, signup, login },
+    dispatch
+  );
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
