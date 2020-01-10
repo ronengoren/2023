@@ -11,16 +11,18 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import reducer from "./store/reducers";
+import Routes from "./components/routes";
 
-const middleware = applyMiddleware(thunkMiddleware);
-const store = createStore(reducer, middleware);
+// const middleware = applyMiddleware(thunkMiddleware);
+// const store = createStore(reducer, middleware);
 
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <InitialRouter />
-      </Provider>
+      <Routes />
+      // <Provider store={store}>
+      //   <InitialRouter />
+      // </Provider>
     );
   }
 }

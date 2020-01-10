@@ -9,13 +9,16 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
-  Platform
+  Platform,
+  Button
 } from "react-native";
 import GlobalStyles from "../global/GlobalStyles";
 import Carousel from "react-native-snap-carousel";
 import Mailer from "react-native-mail";
 import { sliderWidth, itemWidth } from "./styles/SliderEntry.style";
 import SliderEntry from "./SliderEntry";
+import Firebase from "../../Fire";
+import { connect } from "react-redux";
 
 const BORDER_RADIUS = 10;
 const CLOSE_SCROLL_DISTANCE = 100;
@@ -64,9 +67,18 @@ class ProfileCardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+      currentUser: null
     };
   }
+  componentDidMount() {
+    const { currentUser } = Firebase.auth();
+    this.setState({ currentUser });
+  }
+  handleSignout = () => {
+    Firebase.auth().signOut();
+    this.props.navigation.navigate("LoginPage");
+  };
   _closeProfileCard() {
     if (this.props.exitFunction) {
       this.props.exitFunction();
@@ -139,7 +151,7 @@ class ProfileCardView extends Component {
           >
             <View style={[styles.card, { minHeight: BORDER_RADIUS }]}>
               {example1}
-              <Text>{this.props.email}</Text>
+              <Text>{this.props.user.email}</Text>
 
               <TouchableWithoutFeedback
                 style={{ flex: 1 }}
@@ -151,6 +163,7 @@ class ProfileCardView extends Component {
                       {this.props.firstName} {this.props.lastName}{" "}
                       {/* {this._shouldRenderSafeNameText()} */}
                     </Text>
+                    <Button title="Logout" onPress={this.handleSignout()} />
                   </View>
                   <Text style={[GlobalStyles.subtext, styles.subTitle]}>
                     {this.props.major}
@@ -290,4 +303,11 @@ const styles = StyleSheet.create({
     fontWeight: "100"
   }
 });
-export default ProfileCardView;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+export default connect(mapStateToProps)(ProfileCardView);
+
+// export default ProfileCardView;

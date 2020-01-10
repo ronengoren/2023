@@ -27,8 +27,8 @@ module.exports = StyleSheet.create({
   },
   body: {
     height: height * (2 / 3),
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: "center"
+    // justifyContent: "center"
   },
   emailInputBorder: {
     height: 40,

@@ -20,11 +20,12 @@ const firebaseConfig = {
   authDomain: AUTH_DOMAIN,
   databaseURL: DATABASE_URL,
   projectId: PROJECT_ID,
-  storageBucket: "",
+  storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGE_SENDER_ID
 };
 
 let Firebase = firebase.initializeApp(firebaseConfig);
+
 export const db = firebase.firestore();
 
 // avoid deprecated warnings

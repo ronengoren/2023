@@ -19,7 +19,11 @@ import CreateProfilePage from "../login/CreateProfilePage";
 import LoginPage from "../login/LoginPage";
 import ProfileCardView from "../cards/ProfileCardView";
 import GlobalStyles from "../global/GlobalStyles";
-const global = require("../global/GlobalFunctions.js");
+import Signup from "../login/Signup";
+
+import { Scene, Router } from "react-native-router-flux";
+
+const global = require("../global/GlobalFunctions");
 
 const IS_ANDROID = Platform.OS === "android";
 const NAVBAR_HEIGHT = IS_ANDROID ? 54 : 64; // TODO: check the android tabbar height
@@ -34,6 +38,7 @@ const NAVIGATOR_BACKHANDLER = "NAVIGATOR_BACKHANDLER";
 const AppStack = createStackNavigator({ App: ProfileCardView });
 const AuthStack = createStackNavigator({
   Auth: LoginPage,
+  Signup: Signup,
   ProfileCardView: ProfileCardView,
   CreateProfilePage: CreateProfilePage
 });

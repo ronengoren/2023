@@ -1,4 +1,5 @@
 import Firebase, { db } from "../../Fire";
+import { NavigationActions } from "react-navigation";
 
 export const UPDATE_EMAIL = "UPDATE_EMAIL";
 export const UPDATE_PASSWORD = "UPDATE_PASSWORD";
@@ -27,14 +28,28 @@ export const login = () => {
         email,
         password
       );
-      dispatch({ type: LOGIN, payload: response.user });
-      this.props.navigation.navigate("ProfileCardView");
+
+      dispatch(getUser(response.user.uid));
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   };
 };
 
+export const getUser = uid => {
+  return async (dispatch, getState) => {
+    try {
+      const user = await db
+        .collection("users")
+        .doc(uid)
+        .get();
+
+      dispatch({ type: LOGIN, payload: user.data() });
+    } catch (e) {
+      alert(e);
+    }
+  };
+};
 export const signup = () => {
   return async (dispatch, getState) => {
     try {
@@ -43,6 +58,7 @@ export const signup = () => {
         email,
         password
       );
+
       if (response.user.uid) {
         const user = {
           uid: response.user.uid,
@@ -55,7 +71,6 @@ export const signup = () => {
 
         dispatch({ type: SIGNUP, payload: user });
       }
-      this.props.navigation.navigate("CreateProfilePage");
     } catch (e) {
       alert(e);
     }

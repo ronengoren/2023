@@ -20,50 +20,64 @@ import {
 import RectButton from "../global/RectButton";
 
 import AuthStyle from "./AuthStylesheet";
-// import Fire from "../../Fire";
+import Firebase from "../../Fire";
 // import firebase from "firebase";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
   updateEmail,
   updatePassword,
-  signup,
-  login
+  login,
+  getUser
 } from "../../store/actions/user";
 // import auth from "@react-native-firebase/auth";
 
 const IS_ANDROID = Platform.OS === "android";
 
-class LoginPage extends Component {
+class LoginPage extends React.Component {
   state = {
     isLoading: false,
-    email: "",
-    password: "",
+
     userData: {}
   };
-  constructor(props) {
-    super(props);
-    // this.studentProfile = null;
-  }
+  // componentDidMount = () => {
+  //   Firebase.auth().onAuthStateChanged(user => {
+  //     if (user) {
+  //       this.props.getUser(user.uid);
+  //       if (this.props.user != null) {
+  //         this.props.navigation.navigate("ProfileCardView");
+  //       }
+  //     }
+  //   });
+  // };
+  // componentDidMount = () => {
+  //   Firebase.auth().onAuthStateChanged(user => {
+  //     if (user) {
+  //       this.props.getUser(user.uid);
+  //       if (this.props.user != null) {
+  //         this.props.navigation.navigate("ProfileCardView");
+  //       }
+  //     }
+  //   });
+  // };
 
-  handleLogin = () => {
-    this.props.login();
-    // this.props.navigation.navigate("ProfileCardView");
-    // const { email, password } = this.state;
+  //   handleLogin = () => {
+  //     this.props.login();
+  //     // this.props.navigation.navigate("ProfileCardView");
+  //     // const { email, password } = this.state;
 
-    // firebase
-    //   .auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(res => {
-    //     this.storeToken(JSON.stringify(res.user));
-    //   })
-    //   .then(() => this.props.navigation.navigate("ProfileCardView"))
+  //     // firebase
+  //     //   .auth()
+  //     //   .signInWithEmailAndPassword(email, password)
+  //     //   .then(res => {
+  //     //     this.storeToken(JSON.stringify(res.user));
+  //     //   })
+  //     //   .then(() => this.props.navigation.navigate("ProfileCardView"))
 
-    //   .catch(error => console.log(error));
-  };
+  //     //   .catch(error => console.log(error));
+  //   };
   _signup = () => {
     this.props.signup();
-    // this.props.navigation.navigate("CreateProfilePage");
     // const { email, password } = this.state;
     // firebase
     //   .auth()
@@ -129,7 +143,7 @@ class LoginPage extends Component {
                 <Text style={AuthStyle.textTitles}> Tufts Email: </Text>
                 <View style={AuthStyle.emailInputBorder}>
                   <TextInput
-                    // ref="emailInput"
+                    ref="emailInput"
                     style={AuthStyle.emailInput}
                     onChangeText={email => this.props.updateEmail(email)}
                     underlineColorAndroid="white"
@@ -142,7 +156,7 @@ class LoginPage extends Component {
                 <Text style={AuthStyle.textTitles}> Password: </Text>
                 <View style={AuthStyle.passwordInputBorder}>
                   <TextInput
-                    // ref="passwordInput"
+                    ref="passwordInput"
                     style={AuthStyle.passwordInput}
                     underlineColorAndroid="white"
                     onChangeText={password =>
@@ -151,8 +165,8 @@ class LoginPage extends Component {
                     value={this.props.user.password}
                     secureTextEntry={true}
                     returnKeyType={"done"}
-                    // onFocus={this._inputFocused.bind(this, "passwordInput")}
-                    // onBlur={this._dismissFocus.bind(this, "passwordInput")}
+                    onFocus={this._inputFocused.bind(this, "passwordInput")}
+                    onBlur={this._dismissFocus.bind(this, "passwordInput")}
                   />
                 </View>
                 <RectButton
@@ -165,15 +179,15 @@ class LoginPage extends Component {
                   <RectButton
                     style={[AuthStyle.solidButton, AuthStyle.buttonBlue]}
                     textStyle={[AuthStyle.solidButtonText, AuthStyle.bold]}
-                    onPress={this.handleLogin.bind(this)}
+                    onPress={() => this.props.login()}
                     text="LOGIN"
                   />
 
                   <RectButton
                     style={[AuthStyle.solidButton, AuthStyle.buttonPink]}
                     textStyle={AuthStyle.solidButtonText}
-                    onPress={this._signup.bind(this)}
-                    text="SIGNUP!"
+                    onPress={() => this.props.navigation.navigate("Signup")}
+                    text="Don't have an account yet? Sign up"
                   />
                 </View>
               </View>
@@ -194,7 +208,7 @@ const styles = StyleSheet.create({
 // export default LoginPage;
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { updateEmail, updatePassword, signup, login },
+    { updateEmail, updatePassword, login, getUser },
     dispatch
   );
 };
