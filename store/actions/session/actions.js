@@ -30,16 +30,26 @@ export const loginUser = (email, password) => dispatch => {
 export const signupUser = (email, password) => dispatch => {
   dispatch(sessionLoading());
 
-  Firebase.auth()
+  const response = Firebase.auth()
     .createUserWithEmailAndPassword(email, password)
+
     .then(user => {
+      console.log("user.isNewUser");
+
+      console.log(user);
+      console.log("user.isNewUser");
+      db.collection("users")
+        .doc(user.user.uid)
+        .set({
+          uid: user.user.uid,
+          email: user.user.email
+        });
       dispatch(signupSuccess(user));
     })
     .catch(error => {
       dispatch(sessionError(error.message));
     });
 };
-
 export const logoutUser = () => dispatch => {
   dispatch(sessionLoading());
 

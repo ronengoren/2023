@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Alert, Image, Button } from "react-native";
+import { View, Alert, Image, Button, ImageBackground } from "react-native";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -14,6 +14,10 @@ import {
 const FIREBASE_LOGO = require("../../../assets/icon.png");
 
 class LoginFormComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.userProfile = null;
+  }
   componentDidMount() {
     this.props.restore();
   }
@@ -39,7 +43,11 @@ class LoginFormComponent extends Component {
           {loading ? (
             <LoadingIndicator color="#ffffff" size="large" />
           ) : (
-            <BasicFormComponent buttonTitle={"login"} onButtonPress={login} />
+            <BasicFormComponent
+              buttonTitle={"login"}
+              onButtonPress={login}
+              userProfile={this.userProfile}
+            />
           )}
         </View>
         <View>
