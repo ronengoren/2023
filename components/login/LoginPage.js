@@ -35,55 +35,16 @@ import {
 const IS_ANDROID = Platform.OS === "android";
 
 class LoginPage extends React.Component {
-  state = {
-    isLoading: false,
+   this.userProfile = null;
+    this.email = "";
+    this.state = {
+      emailInput: this.props.emailInput || null,
+      password:'',
+      isLoading: false,
+    }
 
-    userData: {}
-  };
-  // componentDidMount = () => {
-  //   Firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.props.getUser(user.uid);
-  //       if (this.props.user != null) {
-  //         this.props.navigation.navigate("ProfileCardView");
-  //       }
-  //     }
-  //   });
-  // };
-  // componentDidMount = () => {
-  //   Firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.props.getUser(user.uid);
-  //       if (this.props.user != null) {
-  //         this.props.navigation.navigate("ProfileCardView");
-  //       }
-  //     }
-  //   });
-  // };
-
-  //   handleLogin = () => {
-  //     this.props.login();
-  //     // this.props.navigation.navigate("ProfileCardView");
-  //     // const { email, password } = this.state;
-
-  //     // firebase
-  //     //   .auth()
-  //     //   .signInWithEmailAndPassword(email, password)
-  //     //   .then(res => {
-  //     //     this.storeToken(JSON.stringify(res.user));
-  //     //   })
-  //     //   .then(() => this.props.navigation.navigate("ProfileCardView"))
-
-  //     //   .catch(error => console.log(error));
-  //   };
   _signup = () => {
     this.props.signup();
-    // const { email, password } = this.state;
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then(() => this.props.navigation.navigate("CreateProfilePage"))
-    //   .catch(error => console.log(error));
   };
 
   _forgotPassword() {

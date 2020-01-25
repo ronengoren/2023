@@ -29,20 +29,30 @@ export const loginUser = (email, password) => dispatch => {
 
 export const signupUser = (email, password) => dispatch => {
   dispatch(sessionLoading());
-
+  const tmpString = email.split("@");
+  const username = tmpString[0];
   const response = Firebase.auth()
     .createUserWithEmailAndPassword(email, password)
 
     .then(user => {
-      console.log("user.isNewUser");
-
-      console.log(user);
-      console.log("user.isNewUser");
       db.collection("users")
         .doc(user.user.uid)
         .set({
-          uid: user.user.uid,
-          email: user.user.email
+          profile: {
+            name_profile: username,
+            email,
+            username,
+            password,
+            userpic:
+              "https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png",
+            posts_number: 0,
+            followers: 0,
+            following: 0,
+            bio: null,
+            sex: null
+          }
+          // uid: user.user.uid,
+          // email: user.user.email
         });
       dispatch(signupSuccess(user));
     })

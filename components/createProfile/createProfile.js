@@ -22,30 +22,58 @@ import AuthErrors from "../login/AuthErrors";
 import ProfilePhotoPicker from "../settings/ProfilePhotoPicker";
 import Firebase, { db } from "../../Fire";
 
-class Search extends React.Component {
+class createProfile extends React.Component {
   constructor(props) {
     super(props);
     this.userProfile = props.userProfile || null;
+    // this.stsTokenManager = props.stsTokenManager || null;
 
     this.state = {
-      firstName: "",
-      lastName: "",
+      firstName: props.firstName,
+      lastName: props.lastName,
       description: "",
-      major: "",
+      major: props.major,
       photos: null
     };
   }
+  _updateStates(newProfile) {
+    this.setState({
+      firstName: newProfile.firstName,
+      lastName: newProfile.lastName,
+      description: newProfile.description,
+      major: newProfile.major,
+      photos: newProfile.photos
+    });
+  }
+  _allPhotosAreNull(photos) {
+    for (var i in photos) {
+      if (
+        photos[i] != null &&
+        photos[i].large != null &&
+        photos[i].small != null &&
+        photos[i].large.length > 0
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-  _updatePhotos(photos) {
-    if (photos && photos.length >= 3) {
-      this.setState({ photos });
-    } else {
+  _checkPropertiesAreValid() {
+    if (this._allPhotosAreNull(this.state.photos)) {
       Alert.alert(
-        "Photo Error",
-        "Something went wrong :( Contact team@jumbosmash.com and let us know that the incorrect number of photos were updated",
+        "Must have at least 1 photo!",
+        "Please add at least 1 photo before saving",
         [{ text: "OK", onPress: () => {} }]
       );
+    } else if (this.state.firstName.length < 1) {
+      Alert.alert("Must include your name!", "", [
+        { text: "OK", onPress: () => {} }
+      ]);
+    } else {
+      return true;
     }
+    return false;
   }
   _inputFocused(refName) {
     setTimeout(() => {
@@ -60,6 +88,18 @@ class Search extends React.Component {
   _focusNextField = nextField => {
     this.refs[nextField].focus();
   };
+  _updatePhotos(photos) {
+    if (photos && photos.length >= 3) {
+      this.setState({ photos });
+    } else {
+      Alert.alert(
+        "Photo Error",
+        "Something went wrong :( Contact team@jumbosmash.com and let us know that the incorrect number of photos were updated",
+        [{ text: "OK", onPress: () => {} }]
+      );
+    }
+  }
+
   _createAccountOnPress() {
     Alert.alert(
       "Terms of Service",
@@ -68,11 +108,7 @@ class Search extends React.Component {
         {
           text: "Yes, I agree to the terms",
           onPress: () => {
-            this._createAccount(this);
-            console.log("this");
-
-            console.log(this.props.user.uid);
-            console.log("this");
+            this._createAccount();
           }
         },
         { text: "Close", onPress: () => {} }
@@ -80,19 +116,27 @@ class Search extends React.Component {
     );
   }
 
-  _createAccount() {
-    // const {
-    //   user: { this.props.user.uid }
-    // } = this.props;
-    db.collection("users")
-      .doc(this.props.user.uid)
-      .set({
-        uid: this.props.user.uid,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        description: this.state.description,
-        major: this.state.description
-      });
+  _createAccount(data) {
+    if (this._checkPropertiesAreValid()) {
+      // console.log("data");
+
+      // console.log(data);
+      // console.log("data.data");
+
+      // const {
+      //   user: { this.props.user.uid }
+      // } = this.props;
+      db.collection("users")
+        .doc(this.props.user.uid)
+        .set({
+          uid: this.props.user.uid,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          description: this.state.description,
+          major: this.state.major,
+          photos: GlobalFunctions.reArrangePhotos(this.state.photos)
+        });
+    }
   }
 
   render() {
@@ -111,7 +155,7 @@ class Search extends React.Component {
           <ProfilePhotoPicker
             photos={this.state.photos}
             updatePhotos={this._updatePhotos.bind(this)}
-            firebase={this.props.firebase}
+            firebase={Firebase}
           />
           <Text style={[styles.header, GlobalStyles.text, styles.textListItem]}>
             First Name: {uid}
@@ -298,4 +342,4 @@ const mapStateToProps = ({ routes, sessionReducer }) => ({
   routes: routes,
   user: sessionReducer.user
 });
-export default connect(mapStateToProps)(Search);
+export default connect(mapStateToProps)(createProfile);

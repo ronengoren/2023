@@ -17,6 +17,12 @@ class LoginFormComponent extends Component {
   constructor(props) {
     super(props);
     this.userProfile = null;
+    this.email = "";
+    this.state = {
+      emailInput: this.props.emailInput || null,
+      password: "",
+      isLoading: false
+    };
   }
   componentDidMount() {
     this.props.restore();
@@ -27,7 +33,7 @@ class LoginFormComponent extends Component {
 
     if (!prevProps.error && error) Alert.alert("error", error);
 
-    if (logged) Actions.reset("home");
+    if (logged) Actions.reset("app");
   }
   render() {
     const { login, loading } = this.props;
@@ -44,9 +50,15 @@ class LoginFormComponent extends Component {
             <LoadingIndicator color="#ffffff" size="large" />
           ) : (
             <BasicFormComponent
+              setEmailInput={emailInput => {
+                this.emailInput = emailInput;
+              }}
+              emailInput={this.emailInput}
               buttonTitle={"login"}
               onButtonPress={login}
               userProfile={this.userProfile}
+              setMyProfile={this.props.setMyProfile}
+              setUserProfile={userProfile => (this.userProfile = userProfile)}
             />
           )}
         </View>

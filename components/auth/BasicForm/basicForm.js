@@ -26,7 +26,7 @@ export class BasicFormComponent extends Component {
           keyboardType="email-address"
           autoCapitalize="none"
           onChangeText={this.handleEmailChange}
-          value={email}
+          value={this.state.emailInput}
           underlineColorAndroid={"transparent"}
         />
 

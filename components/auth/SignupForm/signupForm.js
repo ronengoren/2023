@@ -16,7 +16,7 @@ class SignupFormComponent extends Component {
     this.userProfile = null;
   }
   componentDidUpdate(prevProps) {
-    if (this.props.registered) Actions.reset("search");
+    if (this.props.registered) Actions.reset("app");
   }
   render() {
     const { signup, loading } = this.props;
@@ -34,6 +34,12 @@ class SignupFormComponent extends Component {
               buttonTitle={"signup"}
               onButtonPress={signup}
               userProfile={this.userProfile}
+              setMyProfile={
+                this.props
+                  .updateMyProfile /* updateMyProfile does the same thing as setmyprofile but safer (it preservers the previous myProfile information)*/
+              }
+              myProfile={this.props.myProfile}
+              studentProfile={this.studentProfile}
             />
           )}
         </View>

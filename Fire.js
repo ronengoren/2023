@@ -1,8 +1,8 @@
-// import uuid from "uuid";
-// import getUserInfo from "./utils/getUserInfo";
-// import shrinkImageAsync from "./utils/shrinkImageAsync";
-// import uploadPhoto from "./utils/uploadPhoto";
-import firebase from "firebase";
+import uuid from "uuid";
+import getUserInfo from "./utils/getUserInfo";
+import shrinkImageAsync from "./utils/shrinkImageAsync";
+import uploadPhoto from "./utils/uploadPhoto";
+import * as firebase from "firebase";
 
 import {
   API_KEY,
@@ -14,6 +14,9 @@ import {
 } from "react-native-dotenv";
 // const firebase = require("firebase");
 import "@firebase/firestore";
+// import analytics from "@react-native-firebase/analytics";
+// import "@firebase/analytics";
+const collectionName = "project-6932705831746224621s";
 
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -26,13 +29,37 @@ const firebaseConfig = {
 
 let Firebase = firebase.initializeApp(firebaseConfig);
 
-export const db = firebase.firestore();
+// uploadPhotoAsync = async uri => {
+//   const path = `${collectionName}/${this.uid}/${uuid.v4()}.jpg`;
+//   return uploadPhoto(uri, path);
+// };
+
+// post = async ({ text, image: localUri }) => {
+//   try {
+//     const { uri: reducedImage, width, height } = await shrinkImageAsync(
+//       localUri
+//     );
+
+//     const remoteUri = await this.uploadPhotoAsync(reducedImage);
+//     this.collection.add({
+//       text,
+//       uid: this.uid,
+//       timestamp: this.timestamp,
+//       imageWidth: width,
+//       imageHeight: height,
+//       image: remoteUri,
+//       user: getUserInfo()
+//     });
+//   } catch ({ message }) {
+//     alert(message);
+//   }
+// };
+
+export const db = Firebase.firestore();
 
 // avoid deprecated warnings
 
 export default Firebase;
-
-// const collectionName = "project-6932705831746224621s";
 
 // class Fire {
 //   constructor() {
