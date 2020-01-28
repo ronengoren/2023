@@ -27,7 +27,14 @@ import SignupContainer from "../../components/auth/SignupForm";
 import createProfile from "../../components/createProfile";
 import TodolistContainer from "../../components/todolist";
 import Profile from "../../components/profile/Profile";
+import EditProfile from "../../components/profile/EditProfile";
+import CreateHighlight from "../../components/highlighteds/CreateHighlight";
+import EditHighlight from "../../components/highlighteds/EditHighlight";
+import Highlight from "../../components/highlighteds/Highlight";
+import Explore from "../../components/explore/Explore";
+
 import AddPost from "../../components/post/AddPost";
+import ConfigPost from "../../components/post/ConfigPost";
 
 import CustomTabBar from "./CustomTabBar";
 import TabBarIcon from "../../components/tabBar/tabBarIcon";
@@ -106,6 +113,8 @@ export default class Routes extends React.Component {
                 component={TodolistContainer}
                 title="To-Do List"
               /> */}
+              <Scene key="explore" component={Explore} icon={ExploreIcon} />
+
               <Scene
                 key="profile"
                 component={Profile}
@@ -113,6 +122,12 @@ export default class Routes extends React.Component {
                 hideNavBar
               />
             </Tabs>
+            <Scene key="configPost" component={ConfigPost} />
+            <Scene key="editProfile" component={EditProfile} />
+            <Scene key="createHighlight" component={CreateHighlight} />
+            <Scene key="editHighlight" component={EditHighlight} />
+            <Scene key="highlight" component={Highlight} />
+
             {/* <Scene
               key="createProfile"
               component={createProfile}

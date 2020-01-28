@@ -21,17 +21,17 @@ class Home extends Component {
     posts: []
   };
 
-  // componentWillMount() {
-  //   this.props.fetchPosts();
-  // }
+  UNSAFE_componentWillMount() {
+    this.props.fetchPosts();
+  }
 
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //   if (this.props !== nextProps) {
-  //     this.setState({
-  //       posts: nextProps.posts.posts
-  //     });
-  //   }
-  // }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.setState({
+        posts: nextProps.posts.posts
+      });
+    }
+  }
   renderPosts() {
     if (this.state.posts === undefined || this.state.posts.length === 0) {
       return (
@@ -48,11 +48,14 @@ class Home extends Component {
       });
     }
   }
+  fetchPosts = () => {
+    this.props.fetchPosts();
+  };
 
   logout = () => {
     this.props.logout();
     setTimeout(() => {
-      Actions.reset("login");
+      Actions.reset("auth");
     }, 100);
   };
   render() {
@@ -93,15 +96,17 @@ class Home extends Component {
     );
   }
 }
-const mapStateToProps = ({ posts, routes, sessionReducer }) => ({
+const mapStateToProps = ({ post, routes, sessionReducer }) => ({
   routes: routes,
-  user: sessionReducer.user
+  user: sessionReducer.user,
+  posts: post
+
   // posts: posts
 });
 
 const mapDispatchToProps = {
-  logout: logoutUser
-  // fetchPosts: fetchPosts
+  logout: logoutUser,
+  fetchPosts
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

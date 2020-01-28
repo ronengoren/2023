@@ -83,7 +83,7 @@ class AddPost extends Component {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <ScrollView>
+        <View>
           {this.renderImage()}
           <FlatList
             data={data.images}
@@ -91,7 +91,7 @@ class AddPost extends Component {
             renderItem={this._renderItem}
             numColumns={3}
           />
-        </ScrollView>
+        </View>
       </View>
     );
   }

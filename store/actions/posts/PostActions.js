@@ -11,9 +11,10 @@ import { Actions } from "react-native-router-flux";
 
 export const fetchPosts = () => {
   const { currentUser } = Firebase.auth();
+  console.log(currentUser);
 
   return dispatch => {
-    db()
+    Firebase.database()
       .ref(`/users/${currentUser.uid}/`)
       .child("posts")
       .on("value", snapshot => {
@@ -32,7 +33,7 @@ export const addPost = (image, location, description) => {
   const date = new Date().toLocaleString();
 
   return dispatch => {
-    db()
+    Firebase.database()
       .ref(`/users/${currentUser.uid}/`)
       .child("posts")
       .push({
@@ -48,7 +49,7 @@ export const addPost = (image, location, description) => {
         liked: false
       })
       .then(() => {
-        db()
+        Firebase.database()
           .ref(`/users/${currentUser.uid}/profile/posts_number`)
           .once("value", snapshot => {
             const posts = snapshot.val() + 1;
@@ -76,7 +77,7 @@ export const like = (post, likes) => {
   const newLikes = likes + 1;
 
   return dispatch => {
-    db()
+    Firebase.database()
       .ref(`/users/${currentUser.uid}/posts/${post}/`)
       .update({
         likes: newLikes,
@@ -93,7 +94,7 @@ export const dislike = (post, likes) => {
   const newLikes = likes - 1;
 
   return dispatch => {
-    db()
+    Firebase.database()
       .ref(`/users/${currentUser.uid}/posts/${post}/`)
       .update({
         likes: newLikes,
@@ -110,13 +111,13 @@ export const sendMessage = (post, comments, newcomment) => {
   const newcomments = comments + 1;
 
   return dispatch => {
-    db()
+    Firebase.database()
       .ref(`/users/${currentUser.uid}/posts/${post}/`)
       .update({
         comments_number: newcomments
       })
       .then(() => {
-        db()
+        Firebase.database()
           .ref(`/users/${currentUser.uid}/posts/${post}/comments`)
           .push({
             username: "Alvaro",

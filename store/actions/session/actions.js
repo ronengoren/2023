@@ -35,8 +35,8 @@ export const signupUser = (email, password) => dispatch => {
     .createUserWithEmailAndPassword(email, password)
 
     .then(user => {
-      db.collection("users")
-        .doc(user.user.uid)
+      Firebase.database()
+        .ref(`/users/${response.uid}/`)
         .set({
           profile: {
             name_profile: username,

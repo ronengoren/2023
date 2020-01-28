@@ -14,12 +14,179 @@ class Post extends Component {
     message: "",
     showMessages: false
   };
+  like = () => {
+    this.props.like(this.props.postKey, this.props.likes);
+  };
+
+  dislike = () => {
+    this.props.dislike(this.props.postKey, this.props.likes);
+  };
+
+  onWriteComment = text => {
+    this.setState({
+      message: text
+    });
+  };
+
+  onSendComment = () => {
+    this.props.sendMessage(
+      this.props.postKey,
+      this.props.comments_number,
+      this.state.message
+    );
+    this.setState({
+      message: ""
+    });
+  };
+
+  renderHeart = () => {
+    if (this.props.liked) {
+      return (
+        <TouchableOpacity onPress={this.dislike.bind(this)}>
+          <View>
+            <SimpleLineIcons
+              name="heart"
+              size={30}
+              style={{ marginRight: 5 }}
+              color="red"
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={this.like.bind(this)}>
+          <View>
+            <SimpleLineIcons
+              name="heart"
+              size={30}
+              style={{ marginRight: 5 }}
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  renderImage = () => {
+    if (this.props.liked) {
+      return (
+        <TouchableOpacity activeOpacity={0.7} onPress={this.dislike.bind(this)}>
+          <View>
+            <Image source={{ uri: this.props.image }} style={styles.image} />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity activeOpacity={0.7} onPress={this.like.bind(this)}>
+          <View>
+            <Image source={{ uri: this.props.image }} style={styles.image} />
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  renderSendMessage = () => {
+    if (this.state.message.length > 0) {
+      return (
+        <TouchableOpacity
+          style={{ flex: 0.2, marginTop: 27 }}
+          onPress={this.onSendComment.bind(this)}
+        >
+          <View>
+            <Text style={{ color: "#0984e3" }}>Send</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  renderShowMessages = () => {
+    if (!this.state.showMessages) {
+      return (
+        <TouchableOpacity
+          onPress={this.showMessages.bind(this)}
+          style={{ marginLeft: 15 }}
+        >
+          <View>
+            <Text style={styles.textSeeComments}>
+              See the {this.props.comments_number} comments
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={this.showMessages.bind(this)}
+          style={{ marginLeft: 15 }}
+        >
+          <View>
+            <Text style={styles.textSeeComments}>Close comments</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  showMessages = () => {
+    this.setState({
+      showMessages: !this.state.showMessages
+    });
+  };
+
+  renderMessages = () => {
+    if (this.props.comments !== undefined) {
+      const arrayMessages = Object.values(this.props.comments);
+      const arrayKeys = Object.keys(this.props.comments);
+      if (this.state.showMessages) {
+        return arrayMessages.map((message, i) => {
+          return (
+            <View style={styles.messages} key={arrayKeys[i]}>
+              <Text style={[styles.username, { fontSize: 13 }]}>
+                {message.username}
+              </Text>
+              <Text style={[styles.text, { fontSize: 13 }]}>
+                {message.message}
+              </Text>
+            </View>
+          );
+        });
+      }
+    }
+  };
+  renderImage = () => {
+    if (this.props.liked) {
+      return (
+        <TouchableOpacity activeOpacity={0.7} onPress={this.dislike.bind(this)}>
+          <View>
+            <Image source={{ uri: this.props.image }} style={styles.image} />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity activeOpacity={0.7} onPress={this.like.bind(this)}>
+          <View>
+            <Image source={{ uri: this.props.image }} style={styles.image} />
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
   render() {
     return (
       <View>
         <View style={{ flexDirection: "row", alignContent: "center" }}>
-          <Text style={styles.usernameTop}>{this.props.username}</Text>
+          <Image source={{ uri: this.props.userpic }} style={styles.userPic} />
+          <View style={{ flexDirection: "column" }}>
+            <Text style={styles.usernameTop}>{this.props.username}</Text>
+            <Text style={styles.location}>{this.props.location}</Text>
+          </View>
         </View>
+        {this.renderImage()}
       </View>
     );
   }
